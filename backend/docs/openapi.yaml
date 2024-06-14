@@ -1,0 +1,168 @@
+openapi: 3.0.1
+info:
+  title: Qi-Rec API
+  description: API for auth (sign up, sign in, log out), getting recommended song based on Spotify playlist link,
+    and viewing history of recommended songs
+  version: 1.0.0
+paths:
+  /signup:
+    post:
+      summary: User sign up
+      description: Sign up with email and password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: user@example.com
+                password:
+                  type: string
+                  format: password
+                  example: strongpassword123
+      responses:
+        '200':
+          description: Successfully signed up
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: jwt_token=abc123; HttpOnly
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Sign up successful
+  /signin:
+    post:
+      summary: User sign in
+      description: Sign in with email and password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: user@example.com
+                password:
+                  type: string
+                  format: password
+                  example: strongpassword123
+      responses:
+        '200':
+          description: Successfully signed in
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: jwt_token=abc123; HttpOnly
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Sign in successful
+  /logout:
+    post:
+      summary: User logout
+      description: Log out the current user
+      responses:
+        '200':
+          description: Successfully logged out
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: jwt_token=; HttpOnly; Max-Age=0
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Logout successful
+  /recommendation:
+    post:
+      summary: Get song recommendation from a Spotify playlist link
+      description: Send a Spotify playlist link to get a recommended song
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                playlist_link:
+                  type: string
+                  example: https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M
+      responses:
+        '200':
+          description: Successfully fetched recommended song
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  song:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        example: Blinding Lights
+                      artist:
+                        type: string
+                        example: The Weeknd
+                      cover_link:
+                        type: string
+                        example: https://linktoimage.com/cover.jpg
+                      song_link:
+                        type: string
+                        example: https://open.spotify.com/track/0VjIjW4GlUZAMYd2vXMi3b
+  /recommendation/history:
+    get:
+      summary: Get history of recommended songs
+      description: Retrieve a list of previously recommended songs
+      responses:
+        '200':
+          description: Successfully fetched history of recommended songs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: Blinding Lights
+                    artist:
+                      type: string
+                      example: The Weeknd
+                    cover_link:
+                      type: string
+                      example: https://linktoimage.com/cover.jpg
+                    song_link:
+                      type: string
+                      example: https://open.spotify.com/track/0VjIjW4GlUZAMYd2vXMi3b
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []
