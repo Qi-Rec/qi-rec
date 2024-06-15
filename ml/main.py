@@ -26,7 +26,7 @@ async def startup_event():
 		json.dump(openapi_schema, file)
 
 
-@app.post("/predict")
+@app.post("/predict", response_model=SongResponse)
 async def predict(playlist: Playlist) -> SongResponse:
 	return SongResponse(id=str(Predictor().predict(playlist)["id"]))
 
