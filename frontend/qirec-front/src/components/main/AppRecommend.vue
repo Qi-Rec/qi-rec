@@ -14,6 +14,7 @@
       </form>
     </div>
     <RecommendedSong :recommended-song="recommendedSong"/>
+    <button @click="getRecommendationHistory" class="btn-history">View Recommendation History</button>
   </div>
 </template>
 
@@ -55,6 +56,21 @@ export default {
         console.error('Error recommending song:', error);
       }
     },
+    async getRecommendationHistory() {
+      try {
+        const response = await this.$axios.get('/recommendation/history', {
+          headers: {
+            'Authorization': `Bearer ${this.token}`
+          }
+        });
+
+        if (response.status === 200) {
+          this.$emit('change-component', { component: 'AppRecomHistory', data: response.data.songs });
+        }
+      } catch (error) {
+        console.error('Error fetching recommendation history:', error.response ? error.response.data : error.message);
+      }
+    },
     saveState() {
       const state = {
         playlistLink: this.playlistLink,
@@ -93,6 +109,27 @@ export default {
 .error-message {
   color: red;
   margin-top: 10px;
+}
+
+.btn-history {
+  background-color: white;
+  margin: 1.5rem 0;
+  color: var(--sweet-purple);
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.btn-history:hover {
+  background-color: lightgray;
+}
+
+.btn-history:active {
+  background-color: lightgray;
+  color: var(--sweet-purple);
+  transform: scale(0.95);
 }
 
 </style>

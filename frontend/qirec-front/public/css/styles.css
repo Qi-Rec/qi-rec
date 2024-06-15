@@ -66,10 +66,12 @@ body::before {
 
 .btn {
     padding: 10px 20px;
-    margin-left: 10px;
     font-size: 1rem;
     cursor: pointer;
+}
 
+.btn.login {
+    margin-left: 10px;
 }
 
 .btn:active {
