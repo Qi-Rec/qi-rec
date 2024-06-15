@@ -10,6 +10,8 @@ import (
 
 	"qi-rec/internal/handler"
 	"qi-rec/internal/handlergen"
+	"qi-rec/internal/service/recommendation/adapter"
+	"qi-rec/internal/service/recommendation/recommend"
 	"qi-rec/internal/service/recommendation/spotify"
 	"qi-rec/pkg/config"
 	"qi-rec/pkg/signal"
@@ -40,7 +42,11 @@ func (a *App) Run() {
 		}
 		log.Println("Spotify client created successfully!")
 
-		h := handler.NewHandler(cl)
+		ml := adapter.NewAdapter(a.config.MLHost, a.config.MLPort)
+
+		rec := recommend.NewRecommender(cl, ml)
+
+		h := handler.NewHandler(rec)
 		r := gin.Default()
 
 		cfg := cors.DefaultConfig()
