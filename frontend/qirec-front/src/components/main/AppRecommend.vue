@@ -30,15 +30,18 @@ export default {
       errorMessage: '', // Сообщение об ошибке
     };
   },
+  created() {
+    this.loadState();
+  },
   methods: {
     async recommendSong() {
-      // // Регулярное выражение для проверки ссылки на плейлист в Spotify
-      // const spotifyPlaylistRegex = /^https:\/\/open\.spotify\.com\/playlist\/[a-zA-Z0-9]+\?si=$[a-zA-Z0-9]+/;
-      //
-      // if (!spotifyPlaylistRegex.test(this.playlistLink)) {
-      //   this.errorMessage = 'Spotify playlist link required';
-      //   return;
-      // }
+      // Регулярное выражение для проверки ссылки на плейлист в Spotify
+      const spotifyPlaylistRegex = /https:\/\/open\.spotify\.com\/playlist\/[a-zA-Z0-9]{22}\/*/;
+
+      if (!spotifyPlaylistRegex.test(this.playlistLink)) {
+        this.errorMessage = 'Spotify playlist link required';
+        return;
+      }
 
       this.errorMessage = ''; // Очистить сообщение об ошибке, если ссылка правильная
 
@@ -47,11 +50,38 @@ export default {
           playlist_link: this.playlistLink
         });
         this.recommendedSong = response.data;
-        console.log(response.data)
         console.log('Recommended Song:', this.recommendedSong);
       } catch (error) {
         console.error('Error recommending song:', error);
       }
+    },
+    saveState() {
+      const state = {
+        playlistLink: this.playlistLink,
+        recommendedSong: this.recommendedSong,
+        errorMessage: this.errorMessage
+      };
+      localStorage.setItem('recommendState', JSON.stringify(state));
+    },
+    loadState() {
+      const savedState = localStorage.getItem('recommendState');
+      if (savedState) {
+        const state = JSON.parse(savedState);
+        this.playlistLink = state.playlistLink;
+        this.recommendedSong = state.recommendedSong;
+        this.errorMessage = state.errorMessage;
+      }
+    }
+  },
+  watch: {
+    playlistLink() {
+      this.saveState();
+    },
+    recommendedSong() {
+      this.saveState();
+    },
+    errorMessage() {
+      this.saveState();
     }
   }
 };

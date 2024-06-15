@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <AppHeader @change-component="changeComponent" />
-    <AppMiddle ref="middle" />
+    <AppMiddle :currentComponent="currentComponent" />
     <AppFooter />
   </div>
 </template>
@@ -10,7 +10,6 @@
 import AppHeader from './components/AppHeader.vue';
 import AppMiddle from './components/AppMiddle.vue';
 import AppFooter from './components/AppFooter.vue';
-import axios from "axios"
 
 export default {
   name: 'App',
@@ -19,25 +18,32 @@ export default {
     AppMiddle,
     AppFooter
   },
-
+  data() {
+    return {
+      currentComponent: 'AppRecommend'
+    };
+  },
+  created() {
+    this.loadState();
+  },
   methods: {
     changeComponent(component) {
-      this.$refs.middle.changeComponent(component);
+      this.currentComponent = component;
+      this.saveState();
+    },
+    saveState() {
+      const state = {
+        currentComponent: this.currentComponent
+      };
+      localStorage.setItem('appState', JSON.stringify(state));
+    },
+    loadState() {
+      const savedState = localStorage.getItem('appState');
+      if (savedState) {
+        const state = JSON.parse(savedState);
+        this.currentComponent = state.currentComponent;
+      }
     }
-  },
-  beforeCreate() {
-    this.$root.$on("onChangePage", (page) => this.page = page);
-
-    this.$root.$on("onRecommendSong", (link) => {
-      axios.post("/api/1/recommend", {
-        link
-      }).then(response => {
-        this.$root.$emit("onRecommendSongSuccess", response.data);
-      }).catch(error => {
-        this.$root.$emit("onRecommendSongError", error.response.data);
-      });
-    });
-
   }
 };
 </script>

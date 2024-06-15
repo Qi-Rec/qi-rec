@@ -47,6 +47,7 @@ body::before {
 .logo-title {
     display: flex;
     align-items: center;
+    cursor: pointer;
 }
 
 .logo {
@@ -260,26 +261,23 @@ body::before {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.song-info h4 {
-    margin-top: 0;
-}
-
-.song-cover {
-    max-width: 20%;
-    max-height: 20%;
-    border-radius: 5px;
-}
-
-.btn.song-link {
-    background-color: white;
-    color: var(--sweet-purple);
-    text-decoration: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    display: inline-block;
-    margin-top: 10px;
-}
 
 .btn.song-link:hover {
     background-color: var(--sweet-purple)
+}
+
+
+.btn.signin {
+    background-color: var(--text-color);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.btn.signin:active {
+    transform: scale(0.95); /* Уменьшает размер кнопки */
+    background-color: darkviolet; /* Изменяет цвет кнопки */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }

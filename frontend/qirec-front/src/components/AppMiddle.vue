@@ -1,28 +1,26 @@
 <template>
   <div class="middle">
-    <AppRecommend />
+    <component :is="currentComponent" />
   </div>
 </template>
 
 <script>
 import AppRecommend from './main/AppRecommend.vue';
-
-
+import AppRegister from './main/AppRegister.vue';
+import AppEnter from './main/AppEnter.vue';
 
 export default {
   name: 'AppMiddle',
-  data() {
-    return {
-      currentComponent: 'AppRecommend'
-    };
+  props: {
+    currentComponent: {
+      type: String,
+      required: true
+    }
   },
   components: {
     AppRecommend,
-  },
-  methods: {
-    changeComponent(component) {
-      this.currentComponent = component;
-    }
+    AppRegister,
+    AppEnter
   }
 };
 </script>

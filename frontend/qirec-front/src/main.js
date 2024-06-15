@@ -5,7 +5,7 @@ import axios from 'axios';
 Vue.config.productionTip = false;
 
 // Устанавливаем базовый URL для axios
-axios.defaults.baseURL = 'http://localhost:8080';
+axios.defaults.baseURL = 'http://localhost:3000';
 
 // Добавляем axios в прототип Vue, чтобы можно было использовать его в компонентах через this.$axios
 Vue.prototype.$axios = axios;
