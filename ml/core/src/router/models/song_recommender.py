@@ -9,13 +9,13 @@ from sklearn.neighbors import NearestNeighbors
 
 
 class SongRecommender:
-    def __init__(self, n_neighbors=5):
+    def __init__(self, n_neighbors=7):
         self.n_neighbors = n_neighbors
         self.model = NearestNeighbors(n_neighbors=self.n_neighbors, algorithm='auto')
         self.scaler = StandardScaler()
-        self.features: list[str] = ['danceability', 'energy', 'key', 'loudness', 'mode',
-                         'speechiness', 'acousticness', 'instrumentalness',
-                         'liveness', 'valence', 'tempo', 'duration_ms', 'time_signature']
+        self.features: list[str] = ['danceability', 'energy', 'key', 'mode',
+                                    'speechiness', 'acousticness', 'instrumentalness', 'valence', 'tempo',
+                                    'time_signature']
 
     def fit(self, songs: pd.DataFrame):
         X = songs[self.features]
@@ -44,15 +44,14 @@ class SongRecommender:
         self.scaler = joblib.load(scaler_path)
 
 
-# if __name__ == '__main__':
-#     song_recommender = SongRecommender()
-#
-#     # Load the dataset
-#     dataset = pd.read_csv("../../data/tracks_features.csv")
-#
-#     # Fit the model
-#     song_recommender.fit(dataset)
-#
-#     # Save the model
-#     song_recommender.save_model("dumps/model.joblib", "dumps/scaler.joblib")
-#
+if __name__ == '__main__':
+    song_recommender = SongRecommender()
+
+    # Load the dataset
+    dataset = pd.read_csv("../../data/tracks_features.csv")
+
+    # Fit the model
+    song_recommender.fit(dataset)
+
+    # Save the model
+    song_recommender.save_model("dumps/model.joblib", "dumps/scaler.joblib")

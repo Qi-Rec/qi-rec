@@ -20,4 +20,4 @@ class Predictor:
 		)
 		full_songs = DatasetExtractor(dataset_name=self.dataset_name).extract()
 		recommended_songs = self.song_recommender.predict(playlist, full_songs)
-		return recommended_songs.iloc[1].to_dict()
+		return recommended_songs.iloc[0].to_dict()
