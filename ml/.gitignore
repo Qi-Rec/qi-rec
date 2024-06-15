@@ -60,3 +60,7 @@ docs/_build/
 # PyBuilder
 target/
 maildir
+
+# ML Core
+versioning/mlflow.db
+core/src/data/tracks_features.csv
