@@ -1,7 +1,7 @@
 # Qi-Rec - brand new Spotify Recommendation System
 
 ## Main System Design
-[Link to PDF](docs/SMC.svg)
+![Link to PDF](docs/SMC.svg)
 
 ## Frontend (Artemii Kister)
 
