@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  fastapi:
+    build:
+      context: .
+      dockerfile: ./ml/Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./ml:/app
+    depends_on:
+      - mlflow
+    environment:
+      - MLFLOW_TRACKING_URI=http://mlflow:5001
+      - experiment_name=song_recommender_experiment
+      - bucket_name=smc-finalproject
+      - region=eu-north-1
+
+  mlflow:
+    build:
+      context: .
+      dockerfile: ./ml/mlflow.Dockerfile
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./ml/versioning/mlruns:/mlflow/mlruns
+      - ./ml/versioning/mlflow.db:/mlflow/mlflow.db
+      - ./ml/versioning/mlflow_config.yaml:/mlflow/mlflow_config.yaml
