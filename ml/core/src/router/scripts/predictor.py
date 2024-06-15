@@ -18,7 +18,7 @@ class Predictor:
 
 	def load_best_model(self):
 		experiment_name = "song_recommender_experiment"
-		tracking_uri = "http://localhost:5001"
+		tracking_uri = "http://mlflow:5001"
 
 		client = mlflow.tracking.MlflowClient(tracking_uri=tracking_uri)
 		experiment = client.get_experiment_by_name(experiment_name)
