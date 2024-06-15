@@ -1,9 +1,11 @@
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class AWSSettings(BaseSettings):
-	bucket_name: str = 'qi-rec'
-	region: str = 'eu-east-1'
+	model_config = SettingsConfigDict(env_file='.env', env_file_encoding='utf-8', case_sensitive=True, extra='allow')
+
+	bucket_name: str
+	region: str
 	access_key: str
 	secret_key: str
 

@@ -5,16 +5,12 @@ class Song(BaseModel):
 	danceability: float
 	energy: float
 	key: int
-	loudness: float
 	mode: int
 	speechiness: float
 	acousticness: float
 	instrumentalness: float
-	liveness: float
 	valence: float
 	tempo: float
-	type: str
-	duration_ms: int
 	time_signature: int
 
 

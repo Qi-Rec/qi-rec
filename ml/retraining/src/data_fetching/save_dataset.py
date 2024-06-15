@@ -1,7 +1,6 @@
-import datetime
+import os
 
-from ml.retraining.aws.s3_bucket_setup import S3Bucket
-from ml.retraining.src.settings import settings
+from ..settings import settings
 
 
 def save_dataset(dataset_name: str) -> None:
@@ -13,7 +12,9 @@ def save_dataset(dataset_name: str) -> None:
 	)
 
 	dataset = bucket.retrieve_dataset(dataset_name)
+	base_path = os.path.dirname(os.path.abspath(__file__))
+	dataset_path = os.path.join(base_path, f"../../../core/src/data/{dataset_name}.csv")
 	with open(
-			f"../../../core/src/data/{dataset_name}_{datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.csv", "wb"
+			dataset_path, "wb"
 	) as f:
 		f.write(dataset)
