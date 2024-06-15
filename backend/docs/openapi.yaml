@@ -137,12 +137,20 @@ components:
     Song:
       type: object
       properties:
+        id:
+          type: string
+          example: 58vGdXC2bOfv0VrwiF6wW5
         name:
           type: string
           example: Blinding Lights
         artist:
-          type: string
-          example: The Weeknd
+          type: array
+          items:
+            type: object
+            properties:
+              Name:
+                type: string
+                example: The Weeknd
         cover_link:
           type: string
           example: https://linktoimage.com/cover.jpg
