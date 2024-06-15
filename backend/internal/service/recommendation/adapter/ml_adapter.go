@@ -54,5 +54,12 @@ func (a *MLAdapter) GetRecommendation(features []domain.TrackFeatures) (string, 
 		return "", fmt.Errorf("failed to read response body: %w", err)
 	}
 
-	return string(body), nil
+	var id struct {
+		ID string `json:"id"`
+	}
+	if err := json.Unmarshal(body, &id); err != nil {
+		return "", fmt.Errorf("failed to unmarshal response body: %w", err)
+	}
+
+	return id.ID, nil
 }
