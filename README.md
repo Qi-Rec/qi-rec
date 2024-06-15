@@ -1,5 +1,8 @@
 # Qi-Rec - brand new Spotify Recommendation System
 
+## Main System Design
+[Link to PDF]()
+
 ## Frontend (Artemii Kister)
 
 ## Backend (Dmitry Krasnoyarov)
