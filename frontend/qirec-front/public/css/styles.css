@@ -113,6 +113,11 @@ body::before {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+.rec-song {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
 .form-group {
     margin-bottom: 15px;
 }
@@ -149,7 +154,7 @@ body::before {
     max-width: 400px;
     margin: 50px auto 0;
     background: white;
-    border-radius: 30px;
+    border-radius: 20px;
 }
 
 .form-left-decoration, .form-right-decoration {
@@ -244,4 +249,37 @@ body::before {
     font-weight: 500;
     font-size: 24px;
     color: var(--sweet-purple);
+}
+
+
+/*song display*/
+
+.song-info {
+    margin-top: 20px;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.song-info h4 {
+    margin-top: 0;
+}
+
+.song-cover {
+    max-width: 20%;
+    max-height: 20%;
+    border-radius: 5px;
+}
+
+.btn.song-link {
+    background-color: white;
+    color: var(--sweet-purple);
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.btn.song-link:hover {
+    background-color: var(--sweet-purple)
 }
