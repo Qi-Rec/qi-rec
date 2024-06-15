@@ -1,8 +1,9 @@
 import pandas as pd
 import numpy as np
 import joblib
+import mlflow
 
-from ..schema.schemas import Playlist, Song
+# from ..schema.schemas import Playlist, Song
 
 from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import NearestNeighbors
@@ -22,7 +23,7 @@ class SongRecommender:
         X_scaled = self.scaler.fit_transform(X)
         self.model.fit(X_scaled)
 
-    def predict(self, playlist: Playlist, full_songs: pd.DataFrame) -> Song:
+    def predict(self, playlist, full_songs: pd.DataFrame):
         playlist_df = pd.DataFrame([song.__dict__ for song in playlist.songs])
         full_df = full_songs
 
