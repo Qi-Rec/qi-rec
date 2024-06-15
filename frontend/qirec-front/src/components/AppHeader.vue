@@ -1,13 +1,13 @@
 <template>
   <header class="header">
     <div class="header__content">
-      <div class="logo-title">
+      <div class="logo-title" @click="goToRecommend">
         <img src="../assets/qi-recLogo.png" alt="Logo" class="logo" />
         <h1 class="title">Qi-Rec</h1>
       </div>
       <div class="auth-buttons">
-        <button @click="$emit('change-component', 'Register')" class="btn register">Sign up</button>
-        <button class="btn login">Sign in</button>
+        <button @click="goToRegister" class="btn register">Sign Up</button>
+        <button @click="goToSignIn" class="btn login">Sign In</button>
       </div>
     </div>
   </header>
@@ -15,7 +15,18 @@
 
 <script>
 export default {
-  name: 'AppHeader', // Изменено имя компонента
+  name: 'AppHeader',
+  methods: {
+    goToRecommend() {
+      this.$emit('change-component', 'AppRecommend');
+    },
+    goToRegister() {
+      this.$emit('change-component', 'AppRegister');
+    },
+    goToSignIn() {
+      this.$emit('change-component', 'AppEnter');
+    }
+  }
 };
 </script>
 

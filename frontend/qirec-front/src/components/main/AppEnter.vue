@@ -1,21 +1,20 @@
 <template>
   <div class="recommend">
-    <form @submit.prevent="registerUser">
+    <form @submit.prevent="enterUser">
       <div class="form-left-decoration"></div>
       <div class="form-right-decoration"></div>
       <div class="circle"></div>
       <div class="form-inner">
-        <h3>Register</h3>
+        <h3>Enter</h3>
         <div class="form-group">
           <input type="email" id="email" v-model="email" placeholder="Your Email" required>
         </div>
         <div class="form-group">
           <input type="password" id="password" v-model="password" placeholder="Your Password" required>
         </div>
-        <button type="submit" class="btn signin">Sign up!</button>
+        <button type="submit" class="btn signin">Sign ip!</button>
       </div>
     </form>
-    <div v-if="notification" class="notification">{{ notification }}</div>
   </div>
 </template>
 
@@ -23,7 +22,7 @@
 import axios from 'axios';
 
 export default {
-  name: 'AppRegister',
+  name: 'AppEnter',
   data() {
     return {
       email: '',
@@ -34,18 +33,17 @@ export default {
     this.loadState();
   },
   methods: {
-    async registerUser() {
+    async enterUser() {
+
       try {
-        const response = await axios.post('/signup', {
+        const response = await axios.post('/signin', {
           email: this.email,
           password: this.password
         });
 
         if (response.status === 200) {
-          this.notification = "You've been registered";
-          setTimeout(() => {
-            this.$emit('change-component', 'AppEnter');
-          }, 2000);
+          console.log('Sign up successful:', response.data.message);
+
         }
       } catch (error) {
         console.error('Error during sign up:', error.response ? error.response.data : error.message);
@@ -56,10 +54,10 @@ export default {
         email: this.email,
         password: this.password
       };
-      localStorage.setItem('registerState', JSON.stringify(state));
+      localStorage.setItem('enterState', JSON.stringify(state));
     },
     loadState() {
-      const savedState = localStorage.getItem('registerState');
+      const savedState = localStorage.getItem('enterState');
       if (savedState) {
         const state = JSON.parse(savedState);
         this.email = state.email;
@@ -80,8 +78,4 @@ export default {
 
 <style scoped>
 @import '../../../public/css/styles.css';
-.notification {
-  color: green;
-  margin-top: 10px;
-}
 </style>
