@@ -30,6 +30,8 @@ class Predictor:
 		model_path = os.path.join(best_run.info.artifact_uri, "model")
 		scaler_path = os.path.join(best_run.info.artifact_uri, "scaler.joblib")
 
+		logger.info(f"Loading model from {model_path}")
+
 		self.model = mlflow.sklearn.load_model(model_path)
 		self.scaler = joblib.load(scaler_path)
 
@@ -41,5 +43,7 @@ class Predictor:
 		self.song_recommender.scaler = self.scaler
 
 		full_songs = DatasetExtractor(dataset_name=self.dataset_name).extract()
+		self.song_recommender.fit(full_songs)
 		recommended_songs = self.song_recommender.predict(playlist, full_songs)
+		logger.info(f"Recommended songs: {recommended_songs}")
 		return recommended_songs.iloc[0].to_dict()

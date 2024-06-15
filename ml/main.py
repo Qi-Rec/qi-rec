@@ -1,9 +1,15 @@
+import logging
+import sys
+
 from fastapi import FastAPI
+from loguru import logger
 
 from core.src.router.schema.schemas import Playlist, SongResponse
 from core.src.router.scripts.predictor import Predictor
 
 from versioning.versioning import Versioner
+
+from ml_logging import InterceptHandler
 
 
 app = FastAPI(
@@ -35,3 +41,15 @@ async def predict(playlist: Playlist) -> SongResponse:
 async def commit_new_model():
 	Versioner().commit()
 	return {"message": "Model committed successfully!"}
+
+
+LOGGING_LEVEL = logging.INFO
+LOGGERS = ("uvicorn.asgi", "uvicorn.access")
+
+logging.getLogger().handlers = [InterceptHandler()]
+for logger_name in LOGGERS:
+    logging_logger = logging.getLogger(logger_name)
+    logging_logger.setLevel(LOGGING_LEVEL)
+    logging_logger.handlers.append(InterceptHandler(level=LOGGING_LEVEL))
+
+logger.add(sys.stderr, level=LOGGING_LEVEL)
