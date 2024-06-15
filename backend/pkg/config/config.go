@@ -10,7 +10,11 @@ import (
 type Config struct {
 	ClientID     string `envconfig:"CLIENT_ID" required:"true"`
 	ClientSecret string `envconfig:"CLIENT_SECRET" required:"true"`
-	HTTPPort     string `envconfig:"HTTP_PORT" required:"true"`
+
+	HTTPPort string `envconfig:"HTTP_PORT" required:"true"`
+
+	MLHost string `envconfig:"ML_HOST" required:"true"`
+	MLPort string `envconfig:"ML_PORT" required:"true"`
 }
 
 func LoadConfig() (*Config, error) {

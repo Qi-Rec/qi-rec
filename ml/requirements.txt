@@ -12,6 +12,7 @@ click==8.1.7
 cloudpickle==3.0.0
 contourpy==1.2.1
 cycler==0.12.1
+cryptography==42.0.7
 Deprecated==1.2.14
 dnspython==2.6.1
 docker==7.1.0

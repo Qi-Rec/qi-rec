@@ -23,7 +23,6 @@ class Versioner:
         logger.info("Fitting model")
         self.song_recommender.fit(self.df)
         logger.info("Optimizing hyperparameters")
-        self.song_recommender.optimize_hyperparameters(self.df[self.song_recommender.features], self.df['valence'])
 
         model_path = os.path.join(self.base_path, "model.joblib")
         scaler_path = os.path.join(self.base_path, "scaler.joblib")

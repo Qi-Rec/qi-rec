@@ -17,7 +17,7 @@ class Predictor:
 		self.scaler = None
 
 	def load_best_model(self):
-		experiment_name = "song_recommender_experiment"
+		experiment_name = "song_recommender"
 		tracking_uri = "http://mlflow:5001"
 
 		client = mlflow.tracking.MlflowClient(tracking_uri=tracking_uri)
@@ -41,7 +41,6 @@ class Predictor:
 
 		self.song_recommender.model = self.model
 		self.song_recommender.scaler = self.scaler
-
 		full_songs = DatasetExtractor(dataset_name=self.dataset_name).extract()
 		self.song_recommender.fit(full_songs)
 		recommended_songs = self.song_recommender.predict(playlist, full_songs)

@@ -13,15 +13,14 @@ from loguru import logger
 
 
 class SongRecommender:
-    def __init__(self, n_neighbors=7):
+    def __init__(self, n_neighbors=5):
         self.n_neighbors = n_neighbors
         self.model = NearestNeighbors(n_neighbors=self.n_neighbors, algorithm='auto')
         self.regressor = KNeighborsRegressor(n_neighbors=self.n_neighbors)
         self.scaler = StandardScaler()
         self.pca = None
         self.features = ['danceability', 'energy', 'key', 'mode',
-                         'speechiness', 'acousticness', 'instrumentalness', 'valence', 'tempo',
-                         'time_signature']
+                         'speechiness', 'valence', 'tempo']
 
     def fit(self, songs: pd.DataFrame):
         """
@@ -75,7 +74,9 @@ class SongRecommender:
 
         song_scores = np.zeros(len(recommended_songs))
         for i, index in enumerate(recommended_song_indices):
-            song_scores[i] = np.sum(weights[:, i])
+            if i < weights.shape[1]:
+                valid_weights = weights[:, i][weights[:, i] < len(weights)]
+                song_scores[i] = np.sum(valid_weights)
 
         recommended_songs['score'] = song_scores
         recommended_songs = recommended_songs.sort_values(by='score', ascending=False)
@@ -102,7 +103,7 @@ class SongRecommender:
         n_components = min(len(self.features), len(X))
         self.pca = PCA(n_components=n_components)
         X_reduced = self.pca.fit_transform(X_scaled)
-        param_grid = {'n_neighbors': [3, 5, 7, 10, 15]}
+        param_grid = {'n_neighbors': [7, 10, 15]}
         grid_search = GridSearchCV(KNeighborsRegressor(), param_grid, cv=5)
 
         logger.info('Fitting grid search...')
