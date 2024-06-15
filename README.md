@@ -5,6 +5,64 @@
 
 ## Frontend (Artemii Kister)
 
+The frontend component of the Qi-Rec system provides a user-friendly interface for interacting with the song recommendation engine. Built with modern web technologies, it ensures a seamless experience for users to discover new music based on their current playlists.
+
+### Features
+
+- User Interface: A clean and intuitive design for users to easily input their playlists and view song recommendations.
+- Interactive Elements: Dynamic elements that enhance user interaction, such as real-time search and playlist management.
+
+### Technologies
+
+- HTML/CSS: For structuring and styling the web pages.
+- JavaScript: To handle user interactions and communicate with the backend API.
+- Vue.js: A progressive JavaScript framework for building user interfaces, ensuring a dynamic and responsive application.
+- Axios: For making HTTP requests to the backend API, facilitating seamless data exchange between the frontend and backend.
+
+
+### Prerequisites
+
+- Node.js
+- npm (Node Package Manager)
+
+### Installing
+
+1. Clone the repository:
+
+    ```bash 
+    git clone https://github.com/your-repository.git
+    ```
+   
+2. Navigate to the `frontend` directory:
+
+    ```bash
+    cd frontend
+    ```
+   
+3. Install the required dependencies:
+
+    ```bash
+    npm install
+    ```
+   
+### Running the Frontend
+
+4. To start the development server and run the frontend application, use the following command:
+    ```bash
+    npm run serve
+    ```
+   
+
+This will launch the application on http://localhost:8080, where you can interact with the Qi-Rec system’s user interface.
+
+### Built With
+
+- Vue.js
+- Node.js
+- Axios
+
+By following these instructions, you will be able to set up and run the frontend part of the Qi-Rec project, providing a user-friendly interface for song recommendations.
+
 ## Backend (Dmitry Krasnoyarov)
 
 ## ML + MLOps (Arman Tovmasian)
