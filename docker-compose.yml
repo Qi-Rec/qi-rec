@@ -1,5 +1,6 @@
 services:
   fastapi:
+    container_name: ml-fastapi
     build:
       context: .
       dockerfile: ./ml/Dockerfile
@@ -16,6 +17,7 @@ services:
       - region=eu-north-1
 
   mlflow:
+    container_name: ml-mlflow
     build:
       context: .
       dockerfile: ./ml/mlflow.Dockerfile
@@ -25,3 +27,14 @@ services:
       - ./ml/versioning/mlruns:/mlflow/mlruns
       - ./ml/versioning/mlflow.db:/mlflow/mlflow.db
       - ./ml/versioning/mlflow_config.yaml:/mlflow/mlflow_config.yaml
+  backend:
+    container_name: backend-general
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - fastapi
+      - mlflow
+
