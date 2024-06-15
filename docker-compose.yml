@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   fastapi:
     build:
@@ -13,7 +11,7 @@ services:
       - mlflow
     environment:
       - MLFLOW_TRACKING_URI=http://mlflow:5001
-      - experiment_name=song_recommender_experiment
+      - experiment_name=song_recommender
       - bucket_name=smc-finalproject
       - region=eu-north-1
 
