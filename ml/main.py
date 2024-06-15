@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from schema.schemas import Song, Playlist, SongResponse
-from models.song_recommender import SongRecommender
+from core.src.router.schema.schemas import Playlist, SongResponse
+from core.src.router.scripts.predictor import Predictor
 
 
 app = FastAPI(
@@ -12,7 +12,7 @@ app = FastAPI(
 
 @app.on_event("startup")
 async def startup_event():
-	with open("openapi.json", "w") as file:
+	with open("core/src/router/openapi.json", "w") as file:
 		import json
 		from fastapi.openapi.utils import get_openapi
 		openapi_schema = get_openapi(
@@ -25,10 +25,4 @@ async def startup_event():
 
 @app.post("/predict")
 async def predict(playlist: Playlist) -> SongResponse:
-	song_recommender = SongRecommender()
-	song_recommender.load_model(
-		model_path="../router/models/dumps/model.joblib",
-		scaler_path="../router/models/dumps/scaler.joblib"
-	)
-	recommended_songs = song_recommender.predict(playlist, playlist.full_songs)
-	return recommended_songs.iloc[0].to_dict()
+	return SongResponse(id=str(Predictor().predict(playlist)["id"]))

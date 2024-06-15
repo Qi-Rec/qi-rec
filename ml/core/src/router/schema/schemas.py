@@ -13,7 +13,6 @@ class Song(BaseModel):
 	liveness: float
 	valence: float
 	tempo: float
-	type: str
 	duration_ms: int
 	time_signature: int
 

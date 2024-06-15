@@ -1,6 +1,8 @@
-from router.models.song_recommender import SongRecommender
-from router.schema.schemas import Playlist, Song
-from extractor import DatasetExtractor
+import os
+
+from ..models.song_recommender import SongRecommender
+from ..schema.schemas import Playlist
+from ..scripts.extractor import DatasetExtractor
 
 
 class Predictor:
@@ -8,11 +10,14 @@ class Predictor:
 		self.song_recommender = SongRecommender()
 		self.dataset_name = dataset_name
 
-	def predict(self, playlist: Playlist) -> Song:
+	def predict(self, playlist: Playlist):
+		base_dir = os.path.dirname(os.path.abspath(__file__))
+		model_path = os.path.join(base_dir, "../models/dumps/model.joblib")
+		scaler_path = os.path.join(base_dir, "../models/dumps/scaler.joblib")
 		self.song_recommender.load_model(
-			model_path="router/models/model.joblib",
-			scaler_path="router/models/scaler.joblib"
+			model_path=model_path,
+			scaler_path=scaler_path
 		)
 		full_songs = DatasetExtractor(dataset_name=self.dataset_name).extract()
 		recommended_songs = self.song_recommender.predict(playlist, full_songs)
-		return recommended_songs.iloc[0].to_dict()
+		return recommended_songs.iloc[1].to_dict()

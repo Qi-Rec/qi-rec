@@ -1,2 +1,2 @@
-from router.models.song_recommender import SongRecommender
-from router.schema.schemas import Playlist, Song
+from .models.song_recommender import SongRecommender
+from .schema.schemas import Playlist, Song

@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import joblib
 
-from schema.schemas import Playlist, Song
+from ..schema.schemas import Playlist, Song
 
 from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import NearestNeighbors
