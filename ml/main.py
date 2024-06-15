@@ -1,6 +1,9 @@
 from fastapi import FastAPI
+
 from core.src.router.schema.schemas import Playlist, SongResponse
 from core.src.router.scripts.predictor import Predictor
+
+from versioning.versioning import Versioner
 
 
 app = FastAPI(
@@ -26,3 +29,9 @@ async def startup_event():
 @app.post("/predict")
 async def predict(playlist: Playlist) -> SongResponse:
 	return SongResponse(id=str(Predictor().predict(playlist)["id"]))
+
+
+@app.post("/commit_model")
+async def commit_new_model():
+	Versioner().commit()
+	return {"message": "Model committed successfully!"}

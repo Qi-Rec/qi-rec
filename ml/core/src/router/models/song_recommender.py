@@ -1,28 +1,29 @@
 import pandas as pd
 import numpy as np
 import joblib
+import mlflow
 
-from ..schema.schemas import Playlist, Song
+# from ..schema.schemas import Playlist, Song
 
 from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import NearestNeighbors
 
 
 class SongRecommender:
-    def __init__(self, n_neighbors=5):
+    def __init__(self, n_neighbors=7):
         self.n_neighbors = n_neighbors
         self.model = NearestNeighbors(n_neighbors=self.n_neighbors, algorithm='auto')
         self.scaler = StandardScaler()
-        self.features: list[str] = ['danceability', 'energy', 'key', 'loudness', 'mode',
-                         'speechiness', 'acousticness', 'instrumentalness',
-                         'liveness', 'valence', 'tempo', 'duration_ms', 'time_signature']
+        self.features: list[str] = ['danceability', 'energy', 'key', 'mode',
+                                    'speechiness', 'acousticness', 'instrumentalness', 'valence', 'tempo',
+                                    'time_signature']
 
     def fit(self, songs: pd.DataFrame):
         X = songs[self.features]
         X_scaled = self.scaler.fit_transform(X)
         self.model.fit(X_scaled)
 
-    def predict(self, playlist: Playlist, full_songs: pd.DataFrame) -> Song:
+    def predict(self, playlist, full_songs: pd.DataFrame):
         playlist_df = pd.DataFrame([song.__dict__ for song in playlist.songs])
         full_df = full_songs
 
@@ -44,15 +45,14 @@ class SongRecommender:
         self.scaler = joblib.load(scaler_path)
 
 
-# if __name__ == '__main__':
-#     song_recommender = SongRecommender()
-#
-#     # Load the dataset
-#     dataset = pd.read_csv("../../data/tracks_features.csv")
-#
-#     # Fit the model
-#     song_recommender.fit(dataset)
-#
-#     # Save the model
-#     song_recommender.save_model("dumps/model.joblib", "dumps/scaler.joblib")
-#
+if __name__ == '__main__':
+    song_recommender = SongRecommender()
+
+    # Load the dataset
+    dataset = pd.read_csv("../../data/tracks_features.csv")
+
+    # Fit the model
+    song_recommender.fit(dataset)
+
+    # Save the model
+    song_recommender.save_model("dumps/model.joblib", "dumps/scaler.joblib")
