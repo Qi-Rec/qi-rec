@@ -14,6 +14,7 @@ import (
 	"qi-rec/pkg/config"
 	"qi-rec/pkg/signal"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -41,6 +42,13 @@ func (a *App) Run() {
 
 		h := handler.NewHandler(cl)
 		r := gin.Default()
+
+		cfg := cors.DefaultConfig()
+		cfg.AllowAllOrigins = true
+		cfg.AllowMethods = []string{"GET", "POST", "OPTIONS"}
+		cfg.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type"}
+
+		r.Use(cors.New(cfg))
 
 		handlergen.RegisterHandlers(r, h)
 

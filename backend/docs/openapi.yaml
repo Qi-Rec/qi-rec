@@ -137,6 +137,9 @@ components:
     Song:
       type: object
       properties:
+        id:
+          type: string
+          example: 58vGdXC2bOfv0VrwiF6wW5
         name:
           type: string
           example: Blinding Lights

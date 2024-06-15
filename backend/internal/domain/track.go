@@ -1,7 +1,7 @@
 package domain
 
 type Track struct {
-	ID       string
+	ID       string   `json:"id"`
 	Name     string   `json:"name"`
 	Artists  []Artist `json:"artist"`
 	CoverURL string   `json:"cover_link"`
