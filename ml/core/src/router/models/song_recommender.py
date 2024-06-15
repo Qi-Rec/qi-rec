@@ -13,15 +13,14 @@ from loguru import logger
 
 
 class SongRecommender:
-    def __init__(self, n_neighbors=10):
+    def __init__(self, n_neighbors=5):
         self.n_neighbors = n_neighbors
         self.model = NearestNeighbors(n_neighbors=self.n_neighbors, algorithm='auto')
         self.regressor = KNeighborsRegressor(n_neighbors=self.n_neighbors)
         self.scaler = StandardScaler()
         self.pca = None
         self.features = ['danceability', 'energy', 'key', 'mode',
-                         'speechiness', 'acousticness', 'instrumentalness', 'valence', 'tempo',
-                         'time_signature']
+                         'speechiness', 'valence', 'tempo']
 
     def fit(self, songs: pd.DataFrame):
         """
