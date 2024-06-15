@@ -1,0 +1,6 @@
+# yaml-language-server: $schema=../../docs/openapi.yaml
+package: handlergen
+generate:
+  models: true
+  gin-server: true
+output: gen.go

@@ -118,20 +118,7 @@ paths:
                 type: object
                 properties:
                   song:
-                    type: object
-                    properties:
-                      name:
-                        type: string
-                        example: Blinding Lights
-                      artist:
-                        type: string
-                        example: The Weeknd
-                      cover_link:
-                        type: string
-                        example: https://linktoimage.com/cover.jpg
-                      song_link:
-                        type: string
-                        example: https://open.spotify.com/track/0VjIjW4GlUZAMYd2vXMi3b
+                    $ref: '#/components/schemas/Song'
   /recommendation/history:
     get:
       summary: Get history of recommended songs
@@ -144,21 +131,24 @@ paths:
               schema:
                 type: array
                 items:
-                  type: object
-                  properties:
-                    name:
-                      type: string
-                      example: Blinding Lights
-                    artist:
-                      type: string
-                      example: The Weeknd
-                    cover_link:
-                      type: string
-                      example: https://linktoimage.com/cover.jpg
-                    song_link:
-                      type: string
-                      example: https://open.spotify.com/track/0VjIjW4GlUZAMYd2vXMi3b
+                  $ref: '#/components/schemas/Song'
 components:
+  schemas:
+    Song:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Blinding Lights
+        artist:
+          type: string
+          example: The Weeknd
+        cover_link:
+          type: string
+          example: https://linktoimage.com/cover.jpg
+        song_link:
+          type: string
+          example: https://open.spotify.com/track/0VjIjW4GlUZAMYd2vXMi3b
   securitySchemes:
     bearerAuth:
       type: http
