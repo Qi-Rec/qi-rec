@@ -12,49 +12,51 @@
         <div class="form-group">
           <input type="password" id="password" v-model="password" placeholder="Your Password" required>
         </div>
-        <button type="submit" class="btn signin">Sign ip!</button>
+        <button type="submit" class="btn signin">Sign in!</button>
       </div>
     </form>
+    <div v-if="notification" class="notification">{{ notification }}</div>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
 
 export default {
   name: 'AppEnter',
   data() {
     return {
       email: '',
-      password: ''
+      password: '',
+      notification: ''
     };
   },
   created() {
     this.loadState();
   },
   methods: {
+    goToRecommend() {
+      this.$emit('change-component', 'AppRecommend');
+    },
     async enterUser() {
-
       try {
-        const response = await axios.post('/signin', {
+        const response = await this.$axios.post('/signin', {
           email: this.email,
           password: this.password
         });
 
-        if (response.status === 200) {
-          console.log('Sign up successful:', response.data.message);
-
+        if (response.status >= 200 && response.status < 300) {
+          this.notification = "Sign in successful";
+          localStorage.setItem('authorized', "true");
+          this.goToRecommend();
+          location.reload();
+        }
+        if (response.status >= 400 && response.status < 500) {
+          this.notification = "Sign in failed";
         }
       } catch (error) {
         console.error('Error during sign up:', error.response ? error.response.data : error.message);
+        this.notification = 'Sign in failed';
       }
-    },
-    saveState() {
-      const state = {
-        email: this.email,
-        password: this.password
-      };
-      localStorage.setItem('enterState', JSON.stringify(state));
     },
     loadState() {
       const savedState = localStorage.getItem('enterState');
@@ -64,18 +66,17 @@ export default {
         this.password = state.password;
       }
     }
-  },
-  watch: {
-    email() {
-      this.saveState();
-    },
-    password() {
-      this.saveState();
-    }
   }
 };
 </script>
 
 <style scoped>
+
+.notification {
+  color: darkviolet;
+  text-align: center;
+  margin-top: 10px;
+}
+
 @import '../../../public/css/styles.css';
 </style>

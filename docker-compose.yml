@@ -36,7 +36,7 @@ services:
       - "3000:3000"
     depends_on:
       postgres:
-          condition: service_healthy
+        condition: service_healthy
   postgres:
     container_name: postgres-container
     image: 'postgres:latest'
