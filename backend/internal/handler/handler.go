@@ -40,7 +40,7 @@ func (h *Handler) PostRecommendation(c *gin.Context) {
 		return
 	}
 
-	var userID int // TODO
+	var userID int
 	if !setUserID(c, &userID) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "user id not found in token"})
 		return
@@ -57,6 +57,12 @@ func (h *Handler) PostRecommendation(c *gin.Context) {
 		}
 	}
 
+	err = h.us.AddTrackToHistory(c, userID, track)
+	if err != nil {
+		handleError(c, err)
+		return
+	}
+
 	c.JSON(http.StatusOK, track)
 }
 
@@ -67,7 +73,13 @@ func (h *Handler) GetRecommendationHistory(c *gin.Context) {
 		return
 	}
 
-	// TODO
+	history, err := h.us.GetUserHistory(c, userID)
+	if err != nil {
+		handleError(c, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, history)
 }
 
 func (h *Handler) PostSignin(c *gin.Context) {
@@ -84,6 +96,7 @@ func (h *Handler) PostSignin(c *gin.Context) {
 	}
 
 	if h.setTokenToCookie(c, err, u) {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "failed to set token"})
 		return
 	}
 
@@ -104,6 +117,7 @@ func (h *Handler) PostSignup(c *gin.Context) {
 	}
 
 	if h.setTokenToCookie(c, err, u) {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "failed to set token"})
 		return
 	}
 
