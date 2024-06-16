@@ -15,6 +15,11 @@ type Config struct {
 
 	MLHost string `envconfig:"ML_HOST" required:"true"`
 	MLPort string `envconfig:"ML_PORT" required:"true"`
+
+	JWTSecret string `envconfig:"JWT_SECRET" required:"true"`
+
+	DbURL         string `envconfig:"DB_URL" required:"true"`
+	MigrationPath string `envconfig:"MIGRATION_PATH" required:"true"`
 }
 
 func LoadConfig() (*Config, error) {

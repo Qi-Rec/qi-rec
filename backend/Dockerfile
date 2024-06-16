@@ -20,6 +20,8 @@ COPY --from=builder /rec/.env .
 
 COPY --from=builder /rec/rec-server .
 
+COPY --from=builder /rec/migrations ./migrations
+
 EXPOSE 3000
 
 CMD ["./rec-server"]
