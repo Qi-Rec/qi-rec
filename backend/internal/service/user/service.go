@@ -20,15 +20,16 @@ var (
 )
 
 type Service struct {
-	repo repository.UserRepository
+	user    repository.UserRepository
+	history repository.HistoryRepository
 }
 
 func NewService(repo repository.UserRepository) *Service {
-	return &Service{repo: repo}
+	return &Service{user: repo}
 }
 
 func (s *Service) SignUp(ctx context.Context, email string, password string) (*domain.User, error) {
-	ok, err := s.repo.ExistsByEmail(ctx, email)
+	ok, err := s.user.ExistsByEmail(ctx, email)
 	if err != nil {
 		return nil, fmt.Errorf("failed to check if user exists by email: %w", err)
 	}
@@ -45,7 +46,7 @@ func (s *Service) SignUp(ctx context.Context, email string, password string) (*d
 		return nil, fmt.Errorf("failed to hash password: %w", err)
 	}
 
-	user, err := s.repo.CreateUser(ctx, email, hashedPassword)
+	user, err := s.user.CreateUser(ctx, email, hashedPassword)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create user: %w", err)
 	}
@@ -54,7 +55,7 @@ func (s *Service) SignUp(ctx context.Context, email string, password string) (*d
 }
 
 func (s *Service) SignIn(ctx context.Context, email string, password string) (*domain.User, error) {
-	ok, err := s.repo.ExistsByEmail(ctx, email)
+	ok, err := s.user.ExistsByEmail(ctx, email)
 	if err != nil {
 		return nil, fmt.Errorf("failed to check if user exists by email: %w", err)
 	}
@@ -63,7 +64,7 @@ func (s *Service) SignIn(ctx context.Context, email string, password string) (*d
 		return nil, ErrUserNotFound
 	}
 
-	user, err := s.repo.GetUserByEmail(ctx, email)
+	user, err := s.user.GetUserByEmail(ctx, email)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get user by email: %w", err)
 	}
@@ -73,6 +74,15 @@ func (s *Service) SignIn(ctx context.Context, email string, password string) (*d
 	}
 
 	return user, nil
+}
+
+func (s *Service) GetUserHistory(ctx context.Context, userID int) ([]*domain.Track, error) {
+	_, err := s.user.ExistsByID(ctx, userID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to check if user exists by id: %w", err)
+	}
+
+	panic("not implemented") // TODO: Implement
 }
 
 func validate(email string, password string) error {

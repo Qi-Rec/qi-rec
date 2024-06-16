@@ -84,7 +84,7 @@ SELECT EXISTS (
 )
 `
 
-func (q *Queries) ExistsByID(ctx context.Context, id string) (bool, error) {
+func (q *Queries) ExistsByID(ctx context.Context, id int) (bool, error) {
 	var exists bool
 	row := q.pool.QueryRow(ctx, existsByID, id)
 	if err := row.Scan(&exists); err != nil {

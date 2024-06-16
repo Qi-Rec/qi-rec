@@ -3,6 +3,7 @@ package handler
 import (
 	"errors"
 	"net/http"
+	"strconv"
 	"time"
 
 	"qi-rec/internal/domain"
@@ -39,6 +40,12 @@ func (h *Handler) PostRecommendation(c *gin.Context) {
 		return
 	}
 
+	var userID int // TODO
+	if !setUserID(c, &userID) {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "user id not found in token"})
+		return
+	}
+
 	track, err := h.rec.Recommend(*body.PlaylistLink)
 	if err != nil {
 		if errors.Is(err, adapter.ErrUnexpectedStatusFromMLService) { // ML service error
@@ -54,8 +61,13 @@ func (h *Handler) PostRecommendation(c *gin.Context) {
 }
 
 func (h *Handler) GetRecommendationHistory(c *gin.Context) {
-	// TODO implement me
-	panic("implement me")
+	var userID int
+	if !setUserID(c, &userID) {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "user id not found in token"})
+		return
+	}
+
+	// TODO
 }
 
 func (h *Handler) PostSignin(c *gin.Context) {
@@ -138,4 +150,18 @@ func handleError(c *gin.Context, err error) {
 	default:
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}
+}
+
+func setUserID(c *gin.Context, id *int) bool {
+	userIdClaim, ok := c.Get("user_id")
+	if !ok {
+		return false
+	}
+	var err error
+	*id, err = strconv.Atoi(userIdClaim.(string))
+	if err != nil {
+		return false
+	}
+
+	return true
 }
