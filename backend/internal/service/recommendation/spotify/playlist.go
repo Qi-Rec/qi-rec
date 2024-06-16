@@ -22,6 +22,13 @@ func (c *Client) GetTracksByPlaylistID(id string) ([]string, error) {
 	}
 	defer resp.Body.Close()
 
+	if resp.StatusCode != http.StatusOK {
+		if resp.StatusCode == http.StatusNotFound {
+			return nil, ErrSpotifyNotFound
+		}
+		return nil, fmt.Errorf("failed to get playlist, Sporify returned: %s", resp.Status)
+	}
+
 	return decodePlaylist(resp.Body)
 }
 

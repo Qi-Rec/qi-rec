@@ -10,6 +10,7 @@ import (
 	"qi-rec/internal/handlergen"
 	"qi-rec/internal/service/recommendation/adapter"
 	"qi-rec/internal/service/recommendation/recommend"
+	"qi-rec/internal/service/recommendation/spotify"
 	"qi-rec/internal/service/user"
 
 	"github.com/gin-gonic/gin"
@@ -48,13 +49,7 @@ func (h *Handler) PostRecommendation(c *gin.Context) {
 
 	track, err := h.rec.Recommend(*body.PlaylistLink)
 	if err != nil {
-		if errors.Is(err, adapter.ErrUnexpectedStatusFromMLService) { // ML service error
-			c.JSON(http.StatusInternalServerError, gin.H{"Ml service error": err.Error()})
-			return
-		} else {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
+		handleError(c, err)
 	}
 
 	err = h.us.AddTrackToHistory(c, userID, track)
@@ -161,6 +156,12 @@ func handleError(c *gin.Context, err error) {
 		c.JSON(http.StatusNotFound, gin.H{"not found": err.Error()})
 	case errors.Is(err, user.ErrorInvalidPassword):
 		c.JSON(http.StatusUnauthorized, gin.H{"invalid password": err.Error()})
+	case errors.Is(err, spotify.ErrSpotifyNotFound):
+		c.JSON(http.StatusNotFound, gin.H{"not found": err.Error()})
+	case errors.Is(err, spotify.ErrEmptyToken):
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	case errors.Is(err, adapter.ErrUnexpectedStatusFromMLService):
+		c.JSON(http.StatusInternalServerError, gin.H{"unexpected error from ML service": err.Error()})
 	default:
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}
