@@ -47,6 +47,22 @@ func (a *App) Run() {
 			log.Fatalf("Failed to create recommender service: %v", err)
 		}
 
+		log.Println("Spotify client created successfully!")
+
+		ml := adapter.NewAdapter(a.config.MLHost, a.config.MLPort)
+
+		rec := recommend.NewRecommender(cl, ml)
+
+		h := handler.NewHandler(rec)
+		r := gin.Default()
+
+		cfg := cors.DefaultConfig()
+		cfg.AllowAllOrigins = true
+		cfg.AllowMethods = []string{"GET", "POST", "OPTIONS"}
+		cfg.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type"}
+		cfg.ExposeHeaders = []string{"Content-Length"}
+		cfg.AllowCredentials = true
+
 		userService, err := setupUserRepoAndService(ctx, a.config)
 		if err != nil {
 			log.Fatalf("Failed to setup user service: %v", err)
