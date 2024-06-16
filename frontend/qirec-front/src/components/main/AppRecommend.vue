@@ -50,28 +50,34 @@ export default {
         const response = await this.$axios.post('/recommendation', {
           playlist_link: this.playlistLink
         });
-        this.recommendedSong = response.data;
-        console.log('Recommended Song:', this.recommendedSong);
+        if (response.status >= 200 && response.status < 300) {
+          this.recommendedSong = response.data;
+          console.log('Recommended Song:', this.recommendedSong);
+        }
+        if (response.status >= 400 && response.status < 500) {
+          this.errorMessage = 'You must be authorized';
+          console.error('User not authorized');
+        }
       } catch (error) {
         console.error('Error recommending song:', error);
       }
     },
     async getRecommendationHistory() {
       try {
-        const response = await this.$axios.get('/recommendation/history', {
-          headers: {
-            'Authorization': `Bearer ${this.token}`
-          }
-        });
+        const response = await this.$axios.get('/recommendation/history');
 
-        if (response.status === 200) {
-          this.$emit('change-component', { component: 'AppRecomHistory', data: response.data.songs });
+        if (response.status >= 200 && response.status < 300) {
+          this.$emit('change-component', {component: 'AppRecomHistory', data: response.data.songs});
         }
       } catch (error) {
         console.error('Error fetching recommendation history:', error.response ? error.response.data : error.message);
       }
     },
     saveState() {
+      if (!this.token) {
+        return;
+      }
+
       const state = {
         playlistLink: this.playlistLink,
         recommendedSong: this.recommendedSong,
@@ -81,7 +87,7 @@ export default {
     },
     loadState() {
       const savedState = localStorage.getItem('recommendState');
-      if (savedState) {
+      if (savedState != null) {
         const state = JSON.parse(savedState);
         this.playlistLink = state.playlistLink;
         this.recommendedSong = state.recommendedSong;

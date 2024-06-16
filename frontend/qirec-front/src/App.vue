@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <AppHeader @change-component="changeComponent" />
-    <AppMiddle :currentComponent="currentComponent" />
-    <AppFooter />
+    <AppHeader :authorized="authorized" @change-component="changeComponent"/>
+    <AppMiddle :currentComponent="currentComponent" @change-component="changeComponent"/>
+    <AppFooter/>
   </div>
 </template>
 
@@ -20,7 +20,8 @@ export default {
   },
   data() {
     return {
-      currentComponent: 'AppRecommend'
+      currentComponent: 'AppRecommend',
+      authorized: localStorage.getItem('authorized') === 'true'
     };
   },
   created() {
@@ -28,6 +29,7 @@ export default {
   },
   methods: {
     changeComponent(component) {
+      console.log("component changed")
       this.currentComponent = component;
       this.saveState();
     },

@@ -1,6 +1,6 @@
 <template>
   <div class="middle">
-    <component :is="currentComponent" />
+    <component :is="currentComponent" @change-component="$emit('change-component', $event)"/>
   </div>
 </template>
 
