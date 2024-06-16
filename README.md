@@ -65,6 +65,36 @@ By following these instructions, you will be able to set up and run the frontend
 
 ## Backend (Dmitry Krasnoyarov)
 
+The backend component of the Qi-Rec system is responsible for handling user authentication, storing recommendation history, and communicating with the frontend and ML components. It is built using Go, a statically typed, compiled language that is efficient and reliable for backend development.
+
+### Features
+
+- User Authentication: Handles user sign up, sign in, and session management using PostgreSQL.
+- Recommendation History: Stores and retrieves user recommendation history using MongoDB.
+- API Endpoints: Provides endpoints for the frontend to interact with, facilitating seamless data exchange.
+
+### Technologies
+
+- Go: The backend is written in Go, known for its efficiency and strong support for concurrent programming.
+- Gin-Gonic: A web framework written in Go. It features a robust set of libraries for building web applications.
+- PostgreSQL: A powerful, open-source object-relational database system used for user authentication and session management.
+- MongoDB: A source-available cross-platform document-oriented database program, used for storing recommendation history.
+
+### Prerequisites
+
+- Go
+- PostgreSQL
+- MongoDB
+
+### Built With
+
+- Go
+- Gin-Gonic
+- PostgreSQL
+- MongoDB
+
+By following these instructions, you will be able to set up and run the backend part of the Qi-Rec project, providing necessary services for user authentication and recommendation history.
+
 ## ML + MLOps (Arman Tovmasian)
 
 ML Core is a machine learning project that uses Python and the FastAPI framework. It is designed to provide a RESTful API for song recommendation based on a given playlist.
@@ -77,10 +107,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 - Python
 - pip
-
-### Installing
-
-```Future```
+- MLFlow
 
 ## API Endpoints
 
