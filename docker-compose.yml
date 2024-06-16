@@ -38,3 +38,12 @@ services:
       - fastapi
       - mlflow
 
+  frontend:
+    container_name: frontend-vue
+    build:
+      context: ./frontend/qirec-front
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
