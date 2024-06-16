@@ -53,6 +53,8 @@ func (a *App) Run() {
 		cfg.AllowAllOrigins = true
 		cfg.AllowMethods = []string{"GET", "POST", "OPTIONS"}
 		cfg.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type"}
+		cfg.ExposeHeaders = []string{"Content-Length"}
+		cfg.AllowCredentials = true
 
 		r.Use(cors.New(cfg))
 
