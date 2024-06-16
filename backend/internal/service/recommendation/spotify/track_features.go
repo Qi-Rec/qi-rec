@@ -23,6 +23,9 @@ func (c *Client) GetTrackFeatures(id string) (*domain.TrackFeatures, error) {
 		return nil, fmt.Errorf("failed to get track features: %w", err)
 	}
 	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("unexpected status code from Spotify API: %d", resp.StatusCode)
+	}
 
 	return decodeTrackFeatures(resp.Body)
 }

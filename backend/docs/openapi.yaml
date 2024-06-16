@@ -25,7 +25,7 @@ paths:
                   format: password
                   example: strongpassword123
       responses:
-        '200':
+        '201':
           description: Successfully signed up
           headers:
             Set-Cookie:

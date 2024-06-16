@@ -36,6 +36,7 @@ func (r *recommender) Recommend(playlistURI string) (*domain.Track, error) {
 		if err != nil {
 			return nil, fmt.Errorf("failed to get track features: %w", err)
 		}
+
 		features[i] = *f
 	}
 
