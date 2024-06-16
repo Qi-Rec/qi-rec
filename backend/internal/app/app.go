@@ -12,6 +12,7 @@ import (
 	"qi-rec/internal/handler"
 	"qi-rec/internal/handlergen"
 	"qi-rec/internal/repository"
+	"qi-rec/internal/repository/postgres"
 	"qi-rec/internal/service/recommendation/adapter"
 	"qi-rec/internal/service/recommendation/recommend"
 	"qi-rec/internal/service/recommendation/spotify"
@@ -130,7 +131,7 @@ func setupServer(cfg *config.Config, h *handler.Handler) *http.Server {
 
 func setupUserRepo(ctx context.Context, cfg *config.Config) (repository.UserRepository, error) {
 	log.Println("Setting up pgx pool...")
-	pool, err := repository.SetupPgxPool(ctx, cfg.DbURL)
+	pool, err := postgres.SetupPgxPool(ctx, cfg.DbURL)
 	if err != nil {
 		return nil, fmt.Errorf("failed to setup pgx pool: %w", err)
 	}
@@ -143,7 +144,7 @@ func setupUserRepo(ctx context.Context, cfg *config.Config) (repository.UserRepo
 
 func processMigration(cfg *config.Config) error {
 	log.Println("Processing migration...")
-	if err := repository.ProcessMigration(cfg.MigrationPath, cfg.DbURL); err != nil {
+	if err := postgres.ProcessMigration(cfg.MigrationPath, cfg.DbURL); err != nil {
 		return fmt.Errorf("failed to process migration: %w", err)
 	}
 	log.Println("Migration is successful")

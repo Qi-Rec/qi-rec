@@ -2,13 +2,11 @@ package repository
 
 import (
 	"context"
-	"errors"
-	"fmt"
 
 	"qi-rec/internal/domain"
+	"qi-rec/internal/repository/postgres"
 	"qi-rec/internal/repository/postgres/queries"
 
-	"github.com/golang-migrate/migrate/v4"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -20,45 +18,14 @@ type UserRepository interface {
 	ExistsByID(ctx context.Context, id string) (bool, error)
 }
 
-type HistoryRepository interface {
-}
-
-type userRepo struct {
-	*queries.Queries // SQL queries
-	pool             *pgxpool.Pool
-}
-
 func NewUserRepository(pgxPool *pgxpool.Pool) UserRepository {
-	return &userRepo{
+	return &postgres.UserRepo{
 		Queries: queries.New(pgxPool),
-		pool:    pgxPool,
+		Pool:    pgxPool,
 	}
 }
 
-func SetupPgxPool(ctx context.Context, DbURL string) (*pgxpool.Pool, error) {
-	pgxConfig, err := pgxpool.ParseConfig(DbURL)
-	if err != nil {
-		return nil, fmt.Errorf("failed to parse pgx config: %w", err)
-	}
-
-	pool, err := pgxpool.NewWithConfig(ctx, pgxConfig)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create new pgx pool with config: %w", err)
-	}
-
-	return pool, nil
-}
-
-func ProcessMigration(migrationURL string, dbSource string) error {
-	migration, err := migrate.New(migrationURL, dbSource)
-	if err != nil {
-		return fmt.Errorf("failed to create new migration: %w", err)
-	}
-
-	if err = migration.Up(); err != nil && !errors.Is(err, migrate.ErrNoChange) {
-		return fmt.Errorf("failed to migrate up: %w", err)
-	}
-	defer migration.Close()
-
-	return nil
+type HistoryRepository interface {
+	AddTrack(ctx context.Context, userID int, track *domain.Track) error
+	GetHistoryByUserID(ctx context.Context, userID int) ([]*domain.Track, error)
 }
