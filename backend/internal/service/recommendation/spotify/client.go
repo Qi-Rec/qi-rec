@@ -9,7 +9,10 @@ import (
 
 const tokenURL = "https://accounts.spotify.com/api/token"
 
-var ErrEmptyToken = fmt.Errorf("empty access token")
+var (
+	ErrEmptyToken      = fmt.Errorf("empty access token")
+	ErrSpotifyNotFound = fmt.Errorf("entity not found")
+)
 
 type Client struct {
 	token string

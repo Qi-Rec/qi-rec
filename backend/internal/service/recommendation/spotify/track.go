@@ -23,6 +23,13 @@ func (c *Client) GetTrack(id string) (*domain.Track, error) {
 	}
 	defer resp.Body.Close()
 
+	if resp.StatusCode != http.StatusOK {
+		if resp.StatusCode == http.StatusNotFound {
+			return nil, ErrSpotifyNotFound
+		}
+		return nil, fmt.Errorf("failed to get track, Spotify returned: %s", resp.Status)
+	}
+
 	return decodeTrack(resp.Body)
 }
 
