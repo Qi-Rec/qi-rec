@@ -23,6 +23,10 @@ func (j *Jwt) RequireAuth(c *gin.Context) {
 		}
 		return []byte(j.Secret), nil
 	})
+	if err != nil {
+		c.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		if time.Now().Unix() > int64(claims["exp"].(float64)) {

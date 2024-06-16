@@ -123,14 +123,13 @@ func setupServer(cfg *config.Config, h *handler.Handler) *http.Server {
 
 	jwtMiddleware := middleware.Jwt{Secret: cfg.JWTSecret}
 
-	unprotected := r.Group("/")
-	handlergen.RegisterHandlers(unprotected, h)
+	r.Use(func(c *gin.Context) {
+		if c.FullPath() == "/recommendation" || c.FullPath() == "/recommendation/history" {
+			jwtMiddleware.RequireAuth(c)
+		}
+	})
 
-	protected := r.Group("/")
-	protected.Use(jwtMiddleware.RequireAuth)
-
-	protected.POST("/recommendation", h.PostRecommendation)
-	protected.GET("/recommendation/history", h.GetRecommendationHistory)
+	handlergen.RegisterHandlers(r, h)
 
 	return &http.Server{
 		Handler: r,

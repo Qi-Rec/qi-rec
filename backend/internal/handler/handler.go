@@ -3,6 +3,7 @@ package handler
 import (
 	"errors"
 	"net/http"
+	"strconv"
 	"time"
 
 	"qi-rec/internal/domain"
@@ -156,6 +157,11 @@ func setUserID(c *gin.Context, id *int) bool {
 	if !ok {
 		return false
 	}
-	*id = int(userIdClaim.(float64))
+	var err error
+	*id, err = strconv.Atoi(userIdClaim.(string))
+	if err != nil {
+		return false
+	}
+
 	return true
 }
