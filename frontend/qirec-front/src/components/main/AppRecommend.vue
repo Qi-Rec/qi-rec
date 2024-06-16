@@ -54,12 +54,13 @@ export default {
           this.recommendedSong = response.data;
           console.log('Recommended Song:', this.recommendedSong);
         }
-        if (response.status >= 400 && response.status < 500) {
+      } catch (error) {
+        if (error.response.status >= 400 && error.response.status < 500) {
           this.errorMessage = 'You must be authorized';
           console.error('User not authorized');
+        } else {
+          console.error('Error recommending song:', error);
         }
-      } catch (error) {
-        console.error('Error recommending song:', error);
       }
     },
     async getRecommendationHistory() {

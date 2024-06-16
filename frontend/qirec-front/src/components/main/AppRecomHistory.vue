@@ -1,16 +1,16 @@
 <template>
   <div class="recom-history">
     <h3>Recommendation History</h3>
-    <div v-for="song in recentSongs" :key="song.id" class="song-frame">
+    <div v-for="songId in customData.songIds" :key="songId" class="song-frame">
       <iframe
-        style="border-radius:20px"
-        :src="'https://open.spotify.com/embed/track/' + song.id + '?utm_source=generator'"
-        width="100%"
-        height="300"
-        frameborder="0"
-        allowfullscreen=""
-        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-        loading="lazy">
+          style="border-radius:20px"
+          :src="'https://open.spotify.com/embed/track/' + songId + '?utm_source=generator'"
+          width="50%"
+          height="152"
+          frameborder="0"
+          allowfullscreen=""
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          loading="lazy">
       </iframe>
     </div>
   </div>
@@ -20,8 +20,8 @@
 export default {
   name: 'AppRecomHistory',
   props: {
-    recentSongs: {
-      type: Array,
+    customData: {
+      type: Object,
       required: true
     }
   }

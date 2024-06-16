@@ -1,7 +1,8 @@
 <template>
   <div id="app">
     <AppHeader :authorized="authorized" @change-component="changeComponent"/>
-    <AppMiddle :currentComponent="currentComponent" @change-component="changeComponent"/>
+    <AppMiddle :currentComponent="currentComponent" :custom-data="customData" @show-history="showHistory"
+               @change-component="changeComponent"/>
     <AppFooter/>
   </div>
 </template>
@@ -21,7 +22,8 @@ export default {
   data() {
     return {
       currentComponent: 'AppRecommend',
-      authorized: localStorage.getItem('authorized') === 'true'
+      authorized: localStorage.getItem('authorized') === 'true',
+      customData: {}
     };
   },
   created() {
@@ -29,9 +31,15 @@ export default {
   },
   methods: {
     changeComponent(component) {
-      console.log("component changed")
+      console.log("component changed");
       this.currentComponent = component;
       this.saveState();
+    },
+    showHistory({component, data}) {
+      const songIds = data.map(song => song.id).slice(-6);
+      console.log("show history");
+      this.currentComponent = component;
+      this.customData = {songIds};
     },
     saveState() {
       const state = {
