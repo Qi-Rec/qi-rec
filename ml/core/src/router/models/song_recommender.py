@@ -98,7 +98,6 @@ class SongRecommender:
         self.pca = joblib.load(pca_path)
 
     def optimize_hyperparameters(self, X, y):
-        logger.info('Optimizing hyperparameters...')
         X_scaled = self.scaler.fit_transform(X)
         n_components = min(len(self.features), len(X))
         self.pca = PCA(n_components=n_components)
