@@ -32,15 +32,15 @@ async def startup_event():
 		json.dump(openapi_schema, file)
 
 
-@app.post("/predict", response_model=SongResponse)
-async def predict(playlist: Playlist) -> SongResponse:
-	return SongResponse(id=str(Predictor().predict(playlist)["id"]))
-
-
-@app.post("/commit_model")
+@app.on_event("startup")
 async def commit_new_model():
 	Versioner().commit()
 	return {"message": "Model committed successfully!"}
+
+
+@app.post("/predict", response_model=SongResponse)
+async def predict(playlist: Playlist) -> SongResponse:
+	return SongResponse(id=str(Predictor().predict(playlist)["id"]))
 
 
 LOGGING_LEVEL = logging.INFO
