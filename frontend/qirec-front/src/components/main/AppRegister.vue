@@ -20,32 +20,39 @@
 </template>
 
 <script>
-import axios from 'axios';
-
 export default {
   name: 'AppRegister',
   data() {
     return {
       email: '',
-      password: ''
+      password: '',
+      notification: ''
     };
   },
   created() {
     this.loadState();
   },
   methods: {
+    goToRecommend() {
+      this.$emit('change-component', 'AppRecommend');
+    },
     async registerUser() {
       try {
-        const response = await axios.post('/signup', {
+        console.log("sended requerst")
+
+        const response = await this.$axios.post('/signup', {
           email: this.email,
           password: this.password
         });
 
-        if (response.status === 200) {
+        console.log("recieved fresponce from server", response.data)
+
+        if (response.status >= 200 && response.status < 300) {
           this.notification = "You've been registered";
-          setTimeout(() => {
-            this.$emit('change-component', 'AppEnter');
-          }, 2000);
+          console.log("recieved fresponce from server", response.data);
+          localStorage.setItem('authorized', "true");
+          this.$emit('change-component', 'AppRecommend');
+           // location.reload();
         }
       } catch (error) {
         console.error('Error during sign up:', error.response ? error.response.data : error.message);
@@ -80,6 +87,7 @@ export default {
 
 <style scoped>
 @import '../../../public/css/styles.css';
+
 .notification {
   color: green;
   margin-top: 10px;

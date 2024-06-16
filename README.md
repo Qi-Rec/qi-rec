@@ -65,7 +65,7 @@ By following these instructions, you will be able to set up and run the frontend
 
 ## Backend (Dmitry Krasnoyarov)
 
-The backend component of the Qi-Rec system is responsible for handling user authentication, storing recommendation history, and communicating with the frontend and ML components. It is built using Go, a statically typed, compiled language that is efficient and reliable for backend development.
+The backend component of the Qi-Rec system is responsible for integration with Spotify, handling user authentication, storing recommendation history, and communicating with frontend and ML components.
 
 ### Features
 
@@ -74,7 +74,7 @@ The backend component of the Qi-Rec system is responsible for handling user auth
 - API Endpoints: Provides endpoints for the frontend to interact with, facilitating seamless data exchange.
 
 ### Technologies
-
+- Spotify API: Used for fetching user playlists, songs and audio-features.
 - Go: The backend is written in Go, known for its efficiency and strong support for concurrent programming.
 - Gin-Gonic: A web framework written in Go. It features a robust set of libraries for building web applications.
 - PostgreSQL: A powerful, open-source object-relational database system used for user authentication and session management.
