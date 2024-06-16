@@ -54,7 +54,7 @@ func (h *Handler) PostRecommendation(c *gin.Context) {
 }
 
 func (h *Handler) GetRecommendationHistory(c *gin.Context) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
@@ -120,7 +120,7 @@ func (h *Handler) generateJWT(u *domain.User) (string, error) {
 
 func setCookieToken(c *gin.Context, token string) {
 	c.SetSameSite(http.SameSiteLaxMode)
-	c.SetCookie("Authorization", token, 3600*24, "", "", true, true)
+	c.SetCookie("Authorization", token, 3600*24, "", "", true, false)
 }
 
 func handleError(c *gin.Context, err error) {
