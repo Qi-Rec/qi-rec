@@ -20,6 +20,9 @@ type Config struct {
 
 	DbURL         string `envconfig:"DB_URL" required:"true"`
 	MigrationPath string `envconfig:"MIGRATION_PATH" required:"true"`
+
+	MongoURI string `envconfig:"MONGO_URI" required:"true"`
+	DBName   string `envconfig:"DB_NAME" required:"true"`
 }
 
 func LoadConfig() (*Config, error) {

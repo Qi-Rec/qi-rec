@@ -1,4 +1,4 @@
-package mongo
+package mongodb
 
 import (
 	"context"
@@ -11,18 +11,8 @@ import (
 )
 
 type HistoryRepo struct {
-	client   *mongo.Client
-	database *mongo.Database
-}
-
-func NewHistoryRepo(ctx context.Context, dbURI, dbName string) (*HistoryRepo, error) {
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(dbURI))
-	if err != nil {
-		return nil, err
-	}
-
-	database := client.Database(dbName)
-	return &HistoryRepo{client: client, database: database}, nil
+	Client   *mongo.Client
+	Database *mongo.Database
 }
 
 type SongRecommenderHistory struct {
@@ -31,7 +21,7 @@ type SongRecommenderHistory struct {
 }
 
 func (h *HistoryRepo) AddTrack(ctx context.Context, userID int, track *domain.Track) error {
-	collection := h.database.Collection("history")
+	collection := h.Database.Collection("history")
 	filter := bson.M{"user_id": userID}
 	update := bson.M{"$push": bson.M{"tracks": track}}
 
@@ -40,7 +30,7 @@ func (h *HistoryRepo) AddTrack(ctx context.Context, userID int, track *domain.Tr
 }
 
 func (h *HistoryRepo) GetHistoryByUserID(ctx context.Context, userID int) ([]*domain.Track, error) {
-	collection := h.database.Collection("history")
+	collection := h.Database.Collection("history")
 	filter := bson.M{"user_id": userID}
 
 	var result SongRecommenderHistory

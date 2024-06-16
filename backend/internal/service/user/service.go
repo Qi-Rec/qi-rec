@@ -24,8 +24,8 @@ type Service struct {
 	history repository.HistoryRepository
 }
 
-func NewService(repo repository.UserRepository) *Service {
-	return &Service{user: repo}
+func NewService(repo repository.UserRepository, history repository.HistoryRepository) *Service {
+	return &Service{user: repo, history: history}
 }
 
 func (s *Service) SignUp(ctx context.Context, email string, password string) (*domain.User, error) {
@@ -77,12 +77,38 @@ func (s *Service) SignIn(ctx context.Context, email string, password string) (*d
 }
 
 func (s *Service) GetUserHistory(ctx context.Context, userID int) ([]*domain.Track, error) {
-	_, err := s.user.ExistsByID(ctx, userID)
+	ok, err := s.user.ExistsByID(ctx, userID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to check if user exists by id: %w", err)
 	}
 
-	panic("not implemented") // TODO: Implement
+	if !ok {
+		return nil, ErrUserNotFound
+	}
+
+	history, err := s.history.GetHistoryByUserID(ctx, userID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get user history: %w", err)
+	}
+
+	return history, nil
+}
+
+func (s *Service) AddTrackToHistory(ctx context.Context, userID int, track *domain.Track) error {
+	ok, err := s.user.ExistsByID(ctx, userID)
+	if err != nil {
+		return fmt.Errorf("failed to check if user exists by id: %w", err)
+	}
+
+	if !ok {
+		return ErrUserNotFound
+	}
+
+	if err := s.history.AddTrack(ctx, userID, track); err != nil {
+		return fmt.Errorf("failed to add track to history: %w", err)
+	}
+
+	return nil
 }
 
 func validate(email string, password string) error {

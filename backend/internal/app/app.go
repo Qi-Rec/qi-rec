@@ -49,7 +49,7 @@ func (a *App) Run() {
 			log.Fatalf("Failed to create recommender service: %v", err)
 		}
 
-		userService, err := setupUserRepoAndService(ctx, a.config)
+		userService, err := setupRepoAndService(ctx, a.config)
 		if err != nil {
 			log.Fatalf("Failed to setup user service: %v", err)
 		}
@@ -97,7 +97,7 @@ func createRecommenderService(cfg *config.Config) (recommend.Recommender, error)
 	return recommend.NewRecommender(cl, ml), nil
 }
 
-func setupUserRepoAndService(ctx context.Context, cfg *config.Config) (*user.Service, error) {
+func setupRepoAndService(ctx context.Context, cfg *config.Config) (*user.Service, error) {
 	if err := processMigration(cfg); err != nil {
 		return nil, fmt.Errorf("failed to process migration: %w", err)
 	}
@@ -107,7 +107,9 @@ func setupUserRepoAndService(ctx context.Context, cfg *config.Config) (*user.Ser
 		return nil, fmt.Errorf("failed to setup user repository: %w", err)
 	}
 
-	return user.NewService(userRepo), nil
+	historyRepo, err := repository.NewHistoryRepo(ctx, cfg.MongoURI, cfg.DBName)
+
+	return user.NewService(userRepo, historyRepo), nil
 }
 
 func setupServer(cfg *config.Config, h *handler.Handler) *http.Server {
