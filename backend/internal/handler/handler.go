@@ -41,40 +41,40 @@ func (h *Handler) PostRecommendation(c *gin.Context) {
 		return
 	}
 
-	var userID int
-	if !setUserID(c, &userID) {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "user id not found in token"})
-		return
-	}
+	//var userID int
+	//if !setUserID(c, &userID) {
+	//	c.JSON(http.StatusUnauthorized, gin.H{"error": "user id not found in token"})
+	//	return
+	//}
 
 	track, err := h.rec.Recommend(*body.PlaylistLink)
 	if err != nil {
 		handleError(c, err)
 	}
 
-	err = h.us.AddTrackToHistory(c, userID, track)
-	if err != nil {
-		handleError(c, err)
-		return
-	}
+	//err = h.us.AddTrackToHistory(c, userID, track)
+	//if err != nil {
+	//	handleError(c, err)
+	//	return
+	//}
 
 	c.JSON(http.StatusOK, track)
 }
 
 func (h *Handler) GetRecommendationHistory(c *gin.Context) {
-	var userID int
-	if !setUserID(c, &userID) {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "user id not found in token"})
-		return
-	}
+	//var userID int
+	//if !setUserID(c, &userID) {
+	//	c.JSON(http.StatusUnauthorized, gin.H{"error": "user id not found in token"})
+	//	return
+	//}
+	//
+	//history, err := h.us.GetUserHistory(c, userID)
+	//if err != nil {
+	//	handleError(c, err)
+	//	return
+	//}
 
-	history, err := h.us.GetUserHistory(c, userID)
-	if err != nil {
-		handleError(c, err)
-		return
-	}
-
-	c.JSON(http.StatusOK, history)
+	c.JSON(http.StatusOK, nil)
 }
 
 func (h *Handler) PostSignin(c *gin.Context) {
@@ -84,16 +84,16 @@ func (h *Handler) PostSignin(c *gin.Context) {
 		return
 	}
 
-	u, err := h.us.SignIn(c, string(*body.Email), *body.Password)
+	_, err := h.us.SignIn(c, string(*body.Email), *body.Password)
 	if err != nil {
 		handleError(c, err)
 		return
 	}
 
-	if h.setTokenToCookie(c, err, u) {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "failed to set token"})
-		return
-	}
+	//if h.setTokenToCookie(c, err, u) {
+	//	c.JSON(http.StatusUnauthorized, gin.H{"error": "failed to set token"})
+	//	return
+	//}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Successfully signed in"})
 }
@@ -105,16 +105,16 @@ func (h *Handler) PostSignup(c *gin.Context) {
 		return
 	}
 
-	u, err := h.us.SignUp(c, string(*body.Email), *body.Password)
+	_, err := h.us.SignUp(c, string(*body.Email), *body.Password)
 	if err != nil {
 		handleError(c, err)
 		return
 	}
 
-	if h.setTokenToCookie(c, err, u) {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "failed to set token"})
-		return
-	}
+	//if h.setTokenToCookie(c, err, u) {
+	//	c.JSON(http.StatusUnauthorized, gin.H{"error": "failed to set token"})
+	//	return
+	//}
 
 	c.JSON(http.StatusCreated, gin.H{"message": "Successfully signed up"})
 }
