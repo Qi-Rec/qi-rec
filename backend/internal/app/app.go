@@ -11,6 +11,7 @@ import (
 
 	"qi-rec/internal/handler"
 	"qi-rec/internal/handlergen"
+	"qi-rec/internal/middleware"
 	"qi-rec/internal/repository"
 	"qi-rec/internal/repository/postgres"
 	"qi-rec/internal/service/recommendation/adapter"
@@ -118,10 +119,18 @@ func setupServer(cfg *config.Config, h *handler.Handler) *http.Server {
 	corsCfg.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type"}
 	corsCfg.ExposeHeaders = []string{"Content-Length"}
 	corsCfg.AllowCredentials = true
-
 	r.Use(cors.New(corsCfg))
 
-	handlergen.RegisterHandlers(r, h)
+	jwtMiddleware := middleware.Jwt{Secret: cfg.JWTSecret}
+
+	unprotected := r.Group("/")
+	handlergen.RegisterHandlers(unprotected, h)
+
+	protected := r.Group("/")
+	protected.Use(jwtMiddleware.RequireAuth)
+
+	protected.POST("/recommendation", h.PostRecommendation)
+	protected.GET("/recommendation/history", h.GetRecommendationHistory)
 
 	return &http.Server{
 		Handler: r,

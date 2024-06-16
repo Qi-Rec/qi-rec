@@ -15,7 +15,7 @@ type UserRepository interface {
 	GetUserByEmail(ctx context.Context, email string) (*domain.User, error)
 	GetUserByID(ctx context.Context, id string) (*domain.User, error)
 	ExistsByEmail(ctx context.Context, email string) (bool, error)
-	ExistsByID(ctx context.Context, id string) (bool, error)
+	ExistsByID(ctx context.Context, id int) (bool, error)
 }
 
 func NewUserRepository(pgxPool *pgxpool.Pool) UserRepository {
