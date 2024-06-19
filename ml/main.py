@@ -6,6 +6,7 @@ from loguru import logger
 
 from core.src.router.schema.schemas import Playlist, SongResponse
 from core.src.router.scripts.predictor import Predictor
+from retraining.src.data_fetching.save_dataset import save_dataset
 
 from versioning.versioning import Versioner
 
@@ -41,6 +42,13 @@ async def commit_new_model():
 @app.post("/predict", response_model=SongResponse)
 async def predict(playlist: Playlist) -> SongResponse:
 	return SongResponse(id=str(Predictor().predict(playlist)["id"]))
+
+
+@app.post("/load_new_dataset")
+async def load_new_dataset(dataset_name: str):
+	if save_dataset(dataset_name):
+		return {"message": f"Dataset {dataset_name} loaded successfully!"}
+	return {"message": f"Failed to load dataset {dataset_name}"}
 
 
 LOGGING_LEVEL = logging.INFO

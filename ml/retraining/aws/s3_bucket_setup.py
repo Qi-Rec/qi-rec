@@ -1,6 +1,8 @@
 from dataclasses import dataclass
+from loguru import logger
 
 import boto3
+import botocore.errorfactory as errorfactory
 
 
 @dataclass
@@ -20,5 +22,11 @@ class S3Bucket:
 
 	def retrieve_dataset(self, dataset_name: str) -> bytes:
 		"""Get dataset with dataset_name from the bucket and return it as bytes"""
-		obj = self.client.get_object(Bucket=self.bucket_name, Key=dataset_name)
+		try:
+			obj = self.client.get_object(Bucket=self.bucket_name, Key=dataset_name)
+		except errorfactory.ClientError as ex:
+			if ex.response['Error']['Code'] == 'NoSuchKey':
+				logger.info(f'No object ```{dataset_name}``` found - returning empty')
+				return b''
+			raise ex
 		return obj["Body"].read()
