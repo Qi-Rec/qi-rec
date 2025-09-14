@@ -3,7 +3,7 @@
 ## Main System Design
 ![Link to PDF](docs/SMC.svg)
 
-## Frontend (Artemii Kister)
+## Frontend (Arman Tovmasian)
 
 The frontend component of the Qi-Rec system provides a user-friendly interface for interacting with the song recommendation engine. Built with modern web technologies, it ensures a seamless experience for users to discover new music based on their current playlists.
 
@@ -95,7 +95,7 @@ The backend component of the Qi-Rec system is responsible for integration with S
 
 By following these instructions, you will be able to set up and run the backend part of the Qi-Rec project, providing necessary services for user authentication and recommendation history.
 
-## ML + MLOps (Arman Tovmasian)
+## ML + MLOps (Artemii Kister)
 
 ML Core is a machine learning project that uses Python and the FastAPI framework. It is designed to provide a RESTful API for song recommendation based on a given playlist.
 
